@@ -53,12 +53,12 @@ node index.js
 
 This will start the server, and you can access the following endpoints:
 
-- `/auth/google` (Redirects to Google Drive for authentication)
-- `/google/redirect` (Callback URL after successful Google Drive authentication)
-- `/saveText/:sometext` (Endpoint to save text content to Google Drive)
-- `/saveImage` (Endpoint to save an image file to Google Drive)
-- `/saveVideo` (Endpoint to save a video file to Google Drive)
-- `/downloadVideo/:fileId` (Endpoint to download a video file from Google Drive)
+- `/auth/googleapi` (Redirects to Google Drive for authentication)
+- `/google/redirect` (Redirect URL after successful OAuth)
+- `/file/status` (Endpoint to show the status of uploaded files downloadedfiles upload progress download progress)
+- `/file/fileDetails` (Endpoint with fileDetails of all the existing videos in drive (used for getting the file-id for downloading any video))
+- `/file/uploadVideoFile` (Endpoint to save a video file to Google Drive)
+- `/file/downloadVideoFile/:fileId` (Endpoint to download a video file from Google Drive)
 
 ## Customization
 
