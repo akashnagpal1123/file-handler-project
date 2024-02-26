@@ -60,16 +60,9 @@ This will start the server, and you can access the following endpoints:
 - `/file/status` (Endpoint to show the status of uploaded files downloadedfiles upload progress download progress)
 - `/file/fileDetails` (Endpoint with fileDetails of all the existing videos in drive (used for getting the file-id for downloading any video))
 
-## Customization
-
-You can customize the application by modifying the following parameters in the code:
-
-- `MAX_CHUNK_SIZE`: Define the maximum chunk size for chunked uploads.
-- `POLL_INTERVAL`: Adjust the polling interval for monitoring the progress.
-
 ## Contributing
 
-Feel free to contribute to this project by creating issues or pull requests.
+Feel free to contribute to this project via pull requests.
 
 
 
