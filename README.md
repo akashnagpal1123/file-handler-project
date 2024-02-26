@@ -55,10 +55,10 @@ This will start the server, and you can access the following endpoints:
 
 - `/auth/googleapi` (Redirects to Google Drive for authentication)
 - `/google/redirect` (Redirect URL after successful OAuth)
-- `/file/status` (Endpoint to show the status of uploaded files downloadedfiles upload progress download progress)
-- `/file/fileDetails` (Endpoint with fileDetails of all the existing videos in drive (used for getting the file-id for downloading any video))
 - `/file/uploadVideoFile` (Endpoint to save a video file to Google Drive)
 - `/file/downloadVideoFile/:fileId` (Endpoint to download a video file from Google Drive)
+- `/file/status` (Endpoint to show the status of uploaded files downloadedfiles upload progress download progress)
+- `/file/fileDetails` (Endpoint with fileDetails of all the existing videos in drive (used for getting the file-id for downloading any video))
 
 ## Customization
 
