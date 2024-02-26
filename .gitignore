@@ -1,1 +1,12 @@
+
+
+# .gitignore
+
+# Ignore environment files
+.env
+
+# Ignore Node.js modules
 node_modules/
+
+# Ignore credentials file
+credDetails.json

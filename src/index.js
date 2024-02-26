@@ -1,18 +1,18 @@
-import express from 'express';
 import dotenv from 'dotenv';
+dotenv.config();
+import express from 'express';
 import authRoutes from './routes/authRoutes.js';
 import fileRoutes from './routes/fileRoutes.js';
 
-dotenv.config();
 
 const app = express();
 
-//port selection
-const port = process.env.PORT || 3007;
+const port = process.env.PORT || 5007;
+console.log(port)
 
-//route to authentication
+//authentication - routing
 app.use('', authRoutes);
-//route to file upload
+//file upload and download - routing
 app.use('/file', fileRoutes);
 
 app.listen(port, () => {

@@ -1,0 +1,185 @@
+APPROACH TO THE PROBLEM
+  - DIVIDE INTO SMALLER PARTS AND SOLVE THE PROBLEM
+    - Authorization
+    - Uploading File
+    - Downloading File
+    - Status and FileDetails
+
+Google Drive APIs and File Handling Processes 
+
+
+Functionalities
+
+1) AUTHORIZATION (googleDrive.js + authRoutes.js)  
+    -> Google Drive API Setup  // Google Cloud Console
+        -> Goodle Drive API documentation official documentation
+            -> Setting up 
+                - APIs and Services
+                - Enabling Google Drive API 
+                - Creating Credentials
+                - Set up Consent and Scopes and testing usernames too
+    -> Getting Credentials i.e. required for tokens exchange
+    -> Token authentication and error handling
+        -> checking expiry
+            -> if expired -> new token
+            -> if not -> refreshing existing token
+        -> using access_token id
+    -> Handling Errors
+
+2) UPLOADING VIDEO FILE (fileRoutes.js)
+  -> Creating Google Drive Client
+  -> Defining Media Object
+  -> Tracking Upload Progress
+  -> Uploading File to Google Drive
+  -> Updating Uploaded Files Count
+  -> Sending Response
+  -> Resetting Upload Progress
+
+3) DOWNLOADING VIDEO FILE (fileRoutes.js)
+  -> Creating Google Drive Client
+  -> Extracting File ID
+  -> Downloading File from Google Drive
+  -> Converting Blob to Buffer(Arrya - buffer)
+  -> Setting Response Headers
+  -> Initiating the download
+  -> Sending File as Response
+  -> Updating Downloaded Files Count
+  -> Resetting Download Progress
+
+4) STATUS and FILEDETAILS (fileRoutes.js)
+  -> Creating Google Drive Client
+  -> Initializing Files Array
+  -> Listing Video Files from Google Drive
+  -> Concatenating Files Array
+  -> Logging File Details
+  -> Sending File Details as Response
+  -> Setting counter
+  -> for download/upload progress
+  -> for downloaded/uploaded files 
+
+
+
+-----------------------------------------------------------------------
+
+
+# BELOW CODE IS FOR MY REFERENCE ONLY(Bakcup)
+import express from 'express';
+import { oauth2Client } from '../utils/googleDrive.js';
+import { google } from "googleapis";
+import fs from "fs";
+
+const router = express.Router();
+
+// Variables to store progress
+let uploadProgress = 0;
+let downloadProgress = 0;
+
+// Middleware to update progress
+router.use((req, res, next) => {
+  req.uploadProgress = uploadProgress;
+  req.downloadProgress = downloadProgress;
+  next();
+});
+
+// Route to get status
+router.get('/status', (req, res) => {
+  res.json({
+    uploadProgress: req.uploadProgress,
+    downloadProgress: req.downloadProgress,
+  });
+});
+
+// Upload image to drive
+router.get('/uploadImgFile', async (req, res) => {
+  const drive = google.drive({ version: "v3", auth: oauth2Client });
+
+  const driveRes = await drive.files.create({
+    requestBody: {
+      name: "testIMG.jpg",
+      mimeType: "image/jpeg"
+    },
+    media: {
+      mimeType: "image/jpeg",
+      body: fs.createReadStream("image.jpg")
+    }
+  });
+
+  res.send({
+    "message": "Image Uploaded Successfully"
+  });
+
+  // Reset upload progress after completion
+  uploadProgress = 0;
+});
+
+// Upload video to drive
+router.get('/uploadVideoFile', async (req, res) => {
+  const drive = google.drive({ version: "v3", auth: oauth2Client });
+
+  const driveRes = await drive.files.create({
+    requestBody: {
+      name: "testvideo.mp4",
+      mimeType: "video/mp4"
+    },
+    media: {
+      mimeType: "video/mp4",
+      body: fs.createReadStream("video.mp4")
+    }
+  });
+
+  res.send({
+    "message": "Video Uploaded Successfully"
+  });
+
+  // Reset upload progress after completion
+  uploadProgress = 0;
+});
+
+// Download video file from drive
+router.get('/downloadVideoFile/:fileId', async (req, res) => {
+  const drive = google.drive({ version: "v3", auth: oauth2Client });
+  const fileId = req.params.fileId;
+
+  const driveRes = await drive.files.get({
+    fileId: fileId,
+    alt: 'media'
+  });
+
+  const blob = driveRes.data;
+
+  // Convert the Blob to a Buffer
+  const arrayBuffer = await blob.arrayBuffer();
+  const videoBuffer = Buffer.from(arrayBuffer);
+
+  res.setHeader('Content-Disposition', `attachment; filename="downloaded_video.mp4"`);
+  res.setHeader('Content-Type', 'video/mp4');
+  res.send(videoBuffer);
+
+  // Reset download progress after completion
+  downloadProgress = 0;
+});
+
+// We use fileDetails route to read the <fileid> before downloading a file
+router.get('/fileDetails', async (req, res) => {
+  const drive = google.drive({ version: "v3", auth: oauth2Client });
+  const files = [];
+
+  const driveRes = await drive.files.list({
+    q: 'mimeType=\'video/mp4\'',
+    fields: 'nextPageToken, files(id, name)',
+    spaces: 'drive'
+  });
+
+  Array.prototype.push.apply(files, driveRes.files);
+
+  driveRes.data.files.forEach(file => {
+    console.log('Found File: ', file.name, file.id);
+  });
+
+  res.send({
+    "message": "File List Fetched Successfully",
+    "list": driveRes.data.files
+  });
+});
+
+export default router;
