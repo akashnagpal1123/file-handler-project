@@ -1,6 +1,6 @@
 # Google Drive Video Uploading and Downloading Project
 
-This Node.js application facilitates the retrieval of large video files from a designated Google Drive directory. Simultaneously, it enables the uploading of these files to another Google Drive directory using a chunked uploading mechanism. Moreover, it includes an endpoint for monitoring the status of both the download and upload processes, allowing users to track the progress of each chunk.
+This Node.js application facilitates the retrieval of large video files from a designated Google Drive directory. Simultaneously, it enables the uploading of these files to the Google Drive directory using a chunked uploading mechanism. Moreover, it includes an endpoint for monitoring the status of both the download and upload processes, allowing users to track the progress of each chunk.
 
 ## Prerequisites
 
