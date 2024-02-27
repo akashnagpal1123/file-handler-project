@@ -48,7 +48,7 @@ Replace `YOUR_CLIENT_ID`, `YOUR_CLIENT_SECRET`, and `YOUR_REDIRECT_URI` with you
 To run the application, use the following command:
 
 ```bash
-node index.js
+node src/index.js
 ```
 
 This will start the server, and you can access the following endpoints:
